@@ -1,0 +1,378 @@
+import React, { useState } from 'react';
+
+function DropdownExample() {
+  const [loanAmount, setLoanAmount] = useState();
+  const [loanTenure, setLoanTenure] = useState();
+  const [interestRate, setInterestRate] = useState();
+  const [emi, setEMI] = useState();
+  const [totalInterest, setTotalInterest] = useState();
+  const [totalServiceCost, setTotalServiceCost] = useState();
+  const [debtservicecoverageratio, setDebtServiceCoverageRatio] = useState();
+
+  const [profitaftertax, setProfitAfterTax] = useState();
+  const [interestexpenses, setInterestExpenses] = useState();
+  const [depreciationexpenses, setDepreciationExpenses] = useState();
+
+
+  const [dscr, setDSCR] = useState(0);
+
+
+const T= parseFloat(profitaftertax)*100000;
+const E= parseFloat(interestexpenses)*100000;
+const D= parseFloat(depreciationexpenses)*100000;
+const totalaccurals = parseFloat( T + D);
+    
+  
+  const calculateLoan = () => {
+    const P = parseFloat(loanAmount);
+    const N = parseFloat(loanTenure) * 12;
+    const R = parseFloat(interestRate) / (12 * 100);
+    const emiValue =(P+((P*R*N))) /(loanTenure)
+  
+    
+      // (P * R * Math.pow(1 + R^ N)) / Math.pow((1 + R)^ N - 1);
+    const totalInterestValue = ((loanAmount * R * N) / 12)* 2;
+    
+    const totalServiceCostValue =parseFloat( (P+((P*R*N))) / (loanTenure))+ parseFloat( interestexpenses );
+// Total Service Cost = Principal + Interest Expenses + Depreciation Expenses + Total Accruals - Profit After Tax
+
+    const NetOperatingIncome = parseFloat(profitaftertax + interestexpenses);
+    const dscrValue = NetOperatingIncome - interestexpenses;
+
+
+    const DebtService = (loanAmount * interestRate / 100) / [1 - (1 + interestRate / 100 * 12)^(12 * loanTenure) ]
+    //DSCR = (Profit After Tax + Interest Expenses + Depreciation Expenses + Total Accruals) / (Principal / Loan Repayment Years)
+
+    
+
+    // Interest Outgo = (Principal x Interest Expenses) + Depreciation Expenses + Total Accruals - Profit after Tax
+
+    const TotalDebtService = parseFloat(emiValue +   totalInterest)
+    // const debtservicecoverageratio = (5 + 5) / 2
+    const debtServiceCoverageRatioValue = parseFloat((NetOperatingIncome + depreciationexpenses) / DebtService)
+    
+    setDSCR(dscrValue);
+    setEMI(emiValue.toFixed(2));
+    setTotalInterest(totalInterestValue.toFixed(2));
+    setTotalServiceCost(totalServiceCostValue.toFixed(2));
+    setDebtServiceCoverageRatio((debtServiceCoverageRatioValue/10000).toFixed(2))
+  };
+
+  return (
+    <div>
+      <h2>Term Loan Calculator</h2>
+      <label>
+        Loan Amount
+        <input
+          type="text"
+          value={loanAmount}
+          onChange={(e) => setLoanAmount(e.target.value)}
+        />
+      </label>
+      <br />
+      <label>
+        Loan Tenure (in years)
+        <input
+          type="text"
+          value={loanTenure}
+          onChange={(e) => setLoanTenure(e.target.value)}
+        />
+      </label>
+      <br />
+      <label>
+        Interest Rate (in %)
+        <input
+          type="text"
+          value={interestRate}
+          onChange={(e) => setInterestRate(e.target.value)}
+        />
+      </label>
+      <br/>
+      <label>
+      Profit after Tax
+        <input
+          type="text"
+          value={profitaftertax}
+          onChange={(e) => setProfitAfterTax(e.target.value)}
+        />
+      </label>
+      <br/>
+      <label>
+      Interest Expenses
+        <input
+          type="text"
+          value={interestexpenses}
+          onChange={(e) => setInterestExpenses(e.target.value)}
+        />
+      </label>
+      <br/>
+      <label>
+      Depreciation Expenses
+        <input
+          type="text"
+          value={depreciationexpenses}
+          onChange={(e) => setDepreciationExpenses(e.target.value)}
+        />
+      </label>
+      <br/>
+      <label>
+        Total Accurals: <span>{totalaccurals}</span>
+      </label>
+      <br />
+      <button onClick={calculateLoan}>Calculate</button>
+      <br />
+      <label>
+        EMI: <span>{emi}</span>
+      </label>
+      <br />
+      <label>
+        Interest Outgo: <span>{totalInterest}</span>
+      </label>
+      <br />
+      <label>
+        Total Service Cost: <span>{totalServiceCost}</span>
+      </label>
+      <br />
+      <label>
+        DSCR: <span>{debtservicecoverageratio}</span>
+      </label>
+      
+    </div>
+  );
+}
+
+export default DropdownExample;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import './App.css';
+import React, { useState } from 'react';
+import { Container } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+  import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Row from 'react-bootstrap/Row';
+
+
+
+
+
+function Example() {
+    // Declare a new state variable, which we'll call "count"
+    // const [count, setCount] = useState(0);
+    
+
+    // const [addrtype, setAddrType] = useState('Home')
+    // function handleAddrTypeChange(e) {
+    //     setAddrType(e.target.value);
+    //     console.log(addrtype)
+    // }
+    const [turnover, setTurnover] = useState('');
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
+    const [validated, setValidated] = useState(false);
+  
+    const handleTurnoverChange = (event) => {
+      setTurnover(event.target.value);
+    };
+  
+    const handleNameChange = (event) => {
+      setName(event.target.value);
+    };
+  
+    const handlePhoneNumberChange = (event) => {
+      setPhoneNumber(event.target.value);
+    };
+  
+    const handleEmailChange = (event) => {
+      setEmail(event.target.value);
+    };
+  
+    const handleCheckboxChange = (event) => {
+      setIsChecked(event.target.checked);
+    };
+
+    const notify = (params) => toast(params);
+
+
+
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      if (turnover && name && phoneNumber && email) {const formData = {turnover, name, phoneNumber, email, isChecked};
+
+      fetch('http://localhost:3020/details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      // .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        notify("Details added successfully")
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        notify("Failed to add Details")
+
+      });
+        
+      } else {
+        console.log('field missing');
+        notify("Please fill all the fields")
+
+      }
+
+      const handleSubmit = (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+    
+        setValidated(true);
+      };
+};
+
+    return (
+        <div>
+
+
+          <div>
+              <Container>
+          <form onSubmit={handleSubmit} className="annual-form mt-5 mb-5" novalidate>
+                <div className="mb-1">
+                  <label htmlFor="turnover" className="form-label fw-semibold" style={{ fontSize: '15px' }}>Annual Turnover</label>
+                  <select
+                    id="turnover"
+                    className="form-select form-select-sm"
+                    aria-label=".form-select-sm example"
+                    value={turnover}
+                    onChange={handleTurnoverChange}
+                  >
+                    <option value="">Annual Turnover</option>
+                    <option value="1">1 Cr &amp; above</option>
+                    <option value="2">50 Lac - 1 Cr</option>
+                    <option value="3">25-50 Lac</option>
+                    <option value="4">10-25 Lac</option>
+                    <option value="5">5-10 Lac</option>
+                    <option value="6">Less than 5 Lac</option>
+                  </select>
+                </div>
+
+                <div className="mb-1">
+                  <label htmlFor="validationDefault01" className="form-label fw-semibold" style={{ fontSize: '15px' }}>Name</label>
+                  <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    id="name"
+                    placeholder="Name of the Contact Person"
+                    value={name}
+                    onChange={handleNameChange} required
+                  />
+                </div>
+
+                <div className="mb-1">
+                  <label htmlFor="phoneNumber" className="form-label fw-semibold" style={{ fontSize: '15px' }}>Phone Number</label>
+                  <input
+                    type="tel"
+                    className="form-control form-control-sm"
+                    id="phoneNumber"
+                    placeholder="Ten Digit Mobile Number"
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                  />
+                </div>
+
+                <div className="mb-1">
+                  <label htmlFor="email" className="form-label fw-semibold" style={{ fontSize: '15px' }}>Email address</label>
+                  <input
+                        type="email"
+                        className="form-control form-control-sm"
+                        id="email"
+                        placeholder="Your Email ID"
+                        value={email}
+                        onChange={handleEmailChange}
+                        pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                      />
+                </div>
+
+                <div className="mb-1 form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input mt-2"
+                    id="isChecked"
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                  />
+                  <label htmlFor="isChecked" className="form-check-label form-control-sm fw-semibold ps-1">Check me out</label>
+                </div>
+
+                <div className="float">
+                  <p style={{ fontSize: '12px', textAlign:'justify'}}>By clicking on "Apply Now", I agree to Indifi's Privacy Policy (including the ‘purpose’ of collection of my information); and T&C (collectively the “Terms”). Subject to applicable laws, I also give my consent and consent on behalf of any persons</p></div>
+
+                  <div className="d-grid gap-2 col-12">
+                <button onClick={handleSubmit} type="submit" className="btn btn-outline-primary Apply-now">Apply Now</button>
+                
+                {/* <button type="submit" className="btn btn-outline-primary Apply-now">Back</button> */}
+              </div>
+
+          </form>
+          </Container>
+          </div>
+            {/* <p>You clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>
+                Click me
+            </button>
+            <button onClick={() => setCount(count + 5)}>touch me</button>
+
+
+
+
+            <select
+                defaultValue={addrtype}
+                onChange={handleAddrTypeChange}
+                className="browser-default custom-select">
+
+                <option selected value="1">Home</option>
+                <option value="2">Marketing</option>
+                <option value="3">Work</option>
+                <option value="4">Head Office</option>
+
+            </select> */}
+
+       
+  
+
+
+        </div>
+    );
+}
+export default Example;
